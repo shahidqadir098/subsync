@@ -4,22 +4,28 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Lock, Mail, Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
+import { createClient } from '@/lib/supabase'
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail]       = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [show, setShow]         = useState(false)
-  const [loading, setLoading]   = useState(false)
+  const [show, setShow] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-    // TODO: replace with Supabase auth
-    // const { error } = await supabase.auth.signInWithPassword({ email, password })
-    await new Promise(r => setTimeout(r, 800))
+    const supabase = createClient()
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      toast.error(error.message)
+      setLoading(false)
+      return
+    }
     toast.success('Signed in — redirecting to dashboard')
     router.push('/dashboard')
+    router.refresh()
   }
 
   return (

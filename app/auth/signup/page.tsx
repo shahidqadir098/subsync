@@ -5,14 +5,15 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Lock, Mail, Eye, EyeOff, Building2, CheckCircle2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Suspense } from 'react'
+import { createClient } from '@/lib/supabase'
 
 function SignupForm() {
   const router = useRouter()
   const params = useSearchParams()
-  const plan   = params.get('plan') ?? 'starter'
+  const plan = params.get('plan') ?? 'starter'
 
   const [form, setForm] = useState({ company: '', name: '', email: '', password: '' })
-  const [show, setShow]     = useState(false)
+  const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }))
@@ -24,11 +25,30 @@ function SignupForm() {
       return
     }
     setLoading(true)
-    // TODO: replace with Supabase auth
-    // const { error } = await supabase.auth.signUp({ email, password, options: { data: { company_name, full_name } } })
-    await new Promise(r => setTimeout(r, 900))
+    const supabase = createClient()
+    const { data, error } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+      options: {
+        data: { company_name: form.company, full_name: form.name },
+      },
+    })
+    if (error) {
+      toast.error(error.message)
+      setLoading(false)
+      return
+    }
+    // Insert gc_profile row so RLS works
+    if (data.user) {
+      await supabase.from('gc_profiles').insert({
+        user_id: data.user.id,
+        company_name: form.company,
+        plan,
+      })
+    }
     toast.success('Account created! Redirecting…')
     router.push('/dashboard')
+    router.refresh()
   }
 
   return (

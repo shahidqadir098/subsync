@@ -132,12 +132,12 @@ export default function HomePage() {
             <span className="text-lg font-bold tracking-tight text-white">SubSync</span>
           </div>
           <div className="hidden items-center gap-7 text-sm text-slate-400 md:flex">
-            <a href="#features"     className="hover:text-slate-100 transition-colors">Features</a>
+            <a href="#features" className="hover:text-slate-100 transition-colors">Features</a>
             <a href="#how-it-works" className="hover:text-slate-100 transition-colors">How it works</a>
-            <a href="#pricing"      className="hover:text-slate-100 transition-colors">Pricing</a>
+            <a href="#pricing" className="hover:text-slate-100 transition-colors">Pricing</a>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/auth/login"  className="btn-ghost text-sm hidden sm:inline-flex">Sign in</Link>
+            <Link href="/auth/login" className="btn-ghost text-sm hidden sm:inline-flex">Sign in</Link>
             <Link href="/auth/signup" className="btn-primary text-sm">Start free trial</Link>
           </div>
         </div>
@@ -304,11 +304,10 @@ export default function HomePage() {
             {PRICING.map((plan) => (
               <div
                 key={plan.name}
-                className={`relative rounded-xl border p-6 flex flex-col gap-5 ${
-                  plan.featured
+                className={`relative rounded-xl border p-6 flex flex-col gap-5 ${plan.featured
                     ? 'border-brand-500/60 bg-brand-500/5'
                     : 'border-slate-800 bg-slate-900/60'
-                }`}
+                  }`}
               >
                 {plan.featured && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
