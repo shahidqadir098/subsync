@@ -1,4 +1,5 @@
 'use client'
+
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -16,13 +17,20 @@ export default function LoginPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
+
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+
     if (error) {
       toast.error(error.message)
       setLoading(false)
       return
     }
+
     toast.success('Signed in — redirecting to dashboard')
     router.push('/dashboard')
     router.refresh()
@@ -31,6 +39,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
+
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500">
@@ -44,6 +53,8 @@ export default function LoginPage() {
           <p className="text-sm text-slate-500 text-center mb-6">Sign in to your account</p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+            {/* Email */}
             <div>
               <label className="label">Email</label>
               <div className="relative">
@@ -58,6 +69,8 @@ export default function LoginPage() {
                 />
               </div>
             </div>
+
+            {/* Password */}
             <div>
               <label className="label">Password</label>
               <div className="relative">
@@ -70,25 +83,44 @@ export default function LoginPage() {
                   onChange={e => setPassword(e.target.value)}
                   required
                 />
-                <button type="button" onClick={() => setShow(s => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                <button
+                  type="button"
+                  onClick={() => setShow(s => !s)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                >
                   {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
 
-            <button type="submit" disabled={loading} className="btn-primary justify-center py-3 mt-1">
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary justify-center py-3 mt-1"
+            >
               {loading ? 'Signing in…' : 'Sign in'}
             </button>
           </form>
 
+          {/* ✅ FIXED HERE */}
           <div className="mt-4 text-center">
-            <a href="#" className="text-xs text-brand-400 hover:text-brand-300 transition-colors">Forgot password?</a>
+            <Link
+              href="/auth/forgot-password"
+              className="text-xs text-brand-400 hover:text-brand-300 transition-colors"
+            >
+              Forgot password?
+            </Link>
           </div>
+
         </div>
 
         <p className="mt-5 text-center text-sm text-slate-500">
           No account?{' '}
-          <Link href="/auth/signup" className="text-brand-400 hover:text-brand-300 transition-colors">
+          <Link
+            href="/auth/signup"
+            className="text-brand-400 hover:text-brand-300 transition-colors"
+          >
             Start free trial
           </Link>
         </p>
