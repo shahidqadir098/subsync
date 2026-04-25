@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Save } from 'lucide-react'
 import { toast } from 'sonner'
+import { DatePicker } from '@/components/ui/DatePicker'
 
 const TRADES = [
   'Electrical', 'Plumbing', 'HVAC', 'Drywall', 'Framing', 'Concrete',
@@ -93,7 +94,11 @@ export default function NewSubcontractorPage() {
             </div>
             <div>
               <label className="label">Expiry date</label>
-              <input className="input" type="date" value={form.license_expiry} onChange={e => set('license_expiry', e.target.value)} />
+              <DatePicker
+                value={form.license_expiry}
+                onChange={v => set('license_expiry', v)}
+                placeholder="Pick expiry date"
+              />
             </div>
           </div>
         </div>
@@ -108,7 +113,11 @@ export default function NewSubcontractorPage() {
             </div>
             <div>
               <label className="label">COI expiry date</label>
-              <input className="input" type="date" value={form.insurance_expiry} onChange={e => set('insurance_expiry', e.target.value)} />
+              <DatePicker
+                value={form.insurance_expiry}
+                onChange={v => set('insurance_expiry', v)}
+                placeholder="Pick expiry date"
+              />
             </div>
           </div>
           <p className="mt-3 text-xs text-slate-500">

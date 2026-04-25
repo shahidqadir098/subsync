@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase'
 import { MOCK_PROJECTS } from '@/lib/mock-data'
 import { formatDate, formatCurrency } from '@/lib/utils'
 import type { ProjectStatus } from '@/types'
+import { DatePicker } from '@/components/ui/DatePicker'
 
 interface NewProjectForm {
   name: string
@@ -40,7 +41,6 @@ export default function ProjectsPage() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { toast.error('Not authenticated'); setLoading(false); return }
 
-    // Get gc_id from profiles table
     const { data: profile } = await supabase
       .from('profiles')
       .select('id')
@@ -158,13 +158,20 @@ export default function ProjectsPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="label">Start date</label>
-                  <input className="input" type="date" value={form.start_date}
-                    onChange={e => set('start_date', e.target.value)} required />
+                  <DatePicker
+                    value={form.start_date}
+                    onChange={v => set('start_date', v)}
+                    placeholder="Start date"
+                    required
+                  />
                 </div>
                 <div>
                   <label className="label">End date</label>
-                  <input className="input" type="date" value={form.end_date}
-                    onChange={e => set('end_date', e.target.value)} />
+                  <DatePicker
+                    value={form.end_date}
+                    onChange={v => set('end_date', v)}
+                    placeholder="End date"
+                  />
                 </div>
               </div>
               <div>
